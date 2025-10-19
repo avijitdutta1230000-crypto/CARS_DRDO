@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scientist Project Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+    #progress-container {
+      max-width: 800px;
+      margin: 30px auto 10px;
+      padding: 0 20px;
+    }
+    #progress-bar {
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    #progress-bar::before {
+      content: '';
+      height: 100%;
+      width: 0%;
+      background-color: #28a745;
+      display: block;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+    #progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .step {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: #e0e0e0;
+      color: #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .step.active {
+      background-color: #28a745;
+      color: white;
+    }
+    form {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      padding: 35px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .form-section {
+      display: none;
+    }
+    .form-section.active {
+      display: block;
+    }
+    h3 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 600;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin: 16px 0 6px;
+      font-weight: 500;
+      font-size: 15px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .milestone {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .milestone input {
+      flex: 1;
+    }
+    button[type="button"],
+    button[type="submit"] {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn-prev { background-color: #6c757d; color: white; margin-right: 10px; }
+    .btn-next { background-color: #28a745; color: white; }
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      font-weight: 600;
+    }
+    #durationText {
+      margin-top: 8px;
+      display: inline-block;
+      font-weight: 600;
+      color: #333;
+    }
+    select:disabled { background-color: #e9ecef; color: #6c757d; }
+    input[readonly] { background-color: #f0f0f0; }
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div id="progress-container">
+  <div id="progress-bar"></div>
+  <div id="progress-steps">
+    <span class="step active">1</span>
+    <span class="step">2</span>
+    <span class="step">3</span>
+    <span class="step">4</span>
+  </div>
+</div>
+
+<form id="projectForm">
+  <div class="form-section active">
+    <h3>Scientist Information</h3>
+    <label>Scientist Name</label>
+    <input type="text" name="scientistName" value="Rajmouli" readonly />
+
+    <label>Field of Study</label>
+    <input type="text" name="fieldOfStudy" required />
+
+    <button type="button" class="btn-next" onclick="nextSection()">Next</button>
+  </div>
+
+  <div class="form-section">
+    <h3>Consultancy Details</h3>
+
+    <label>Consultant Name</label>
+    <input type="text" name="instituteName" required />
+
+    <label>Consultant Address</label>
+    <textarea name="instituteAddress" required></textarea>
+
+    <label>Consultant Email</label>
+    <input type="email" name="piEmail" required />
+
+    <label>Consultant Contact Number</label>
+    <input type="text" name="piContact" required />
+
+    <label>Co-Principal Investigator (Co-PI) Name</label>
+    <input type="text" name="coPiName" />
+
+    <label>Co-PI Email</label>
+    <input type="email" name="coPiEmail" />
+
+    <label>Co-PI Contact Number</label>
+    <input type="text" name="coPiContact" />
+
+    <button type="button" class="btn-prev" onclick="prevSection()">Previous</button>
+    <button type="button" class="btn-next" onclick="nextSection()">Next</button>
+  </div>
+
+  <div class="form-section">
+    <h3>Project Details</h3>
+
+    <label>Project Title</label>
+    <input type="text" name="projectTitle" value="Neutrino Signal Mapping" readonly />
+
+    <label>Consultancy Charges (INR)</label>
+    <input type="number" name="costEstimation" id="costEstimation" value="330000" required />
+    <div id="costHistory"><strong>Change History:</strong><br>No changes yet.</div>
+
+    <label>Miscellanious Charges (INR)</label>
+    <input type="number" name="costEstimation" id="costEstimation" value="330000" required />
+    <div id="costHistory"><strong>Change History:</strong><br>No changes yet.</div>
+
+    <label>Start Date</label>
+    <input type="date" name="startDate" id="startDate" required />
+    <div id="startDateHistory"><strong>Start Date Change History:</strong><br>No changes yet.</div>
+
+    <label>End Date</label>
+    <input type="date" name="endDate" id="endDate" required />
+    <div id="endDateHistory"><strong>End Date Change History:</strong><br>No changes yet.</div>
+
+    <label>Estimated Duration:</label>
+    <div id="durationText">—</div>
+
+    <label>Scope</label>
+    <textarea name="scope" required></textarea>
+
+    <label>Deliverables</label>
+    <textarea name="deliverables" required></textarea>
+
+    <label>Milestones</label>
+    <div id="milestonesContainer"></div>
+    <button type="button" onclick="addMilestone()">+ Add Milestone</button>
+
+    <button type="button" class="btn-prev" onclick="prevSection()">Previous</button>
+    <button type="button" class="btn-next" onclick="nextSection()">Next</button>
+  </div>
+
+  <div class="form-section">
+    <h3>Approval Section (Director Use Only)</h3>
+    <label>
+      <input type="checkbox" id="isDirector" onclick="toggleApproval()" />
+      I am the Director (Enable approval status)
+    </label>
+
+    <label>Approval Status</label>
+    <select id="approvalStatus" disabled>
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+
+    <button type="button" class="btn-prev" onclick="prevSection()">Previous</button>
+    <button type="submit">Submit Form</button>
+  </div>
+</form>
+
+<div id="footer-container"></div>
+
+<script>
+  let currentSection = 0;
+  const sections = document.querySelectorAll('.form-section');
+  const steps = document.querySelectorAll('.step');
+
+  function updateProgressBar() {
+    const percentage = ((currentSection) / (sections.length - 1)) * 100;
+    document.querySelector('#progress-bar').style.background = `linear-gradient(to right, #28a745 ${percentage}%, #e0e0e0 ${percentage}%)`;
+    steps.forEach((step, index) => step.classList.toggle('active', index <= currentSection));
+  }
+
+  function showSection(index) {
+    sections.forEach((section, i) => section.classList.toggle('active', i === index));
+    updateProgressBar();
+  }
+
+  function nextSection() {
+    if (currentSection < sections.length - 1) {
+      currentSection++;
+      showSection(currentSection);
+    }
+  }
+
+  function prevSection() {
+    if (currentSection > 0) {
+      currentSection--;
+      showSection(currentSection);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    showSection(currentSection);
+  });
+
+  const start = document.getElementById('startDate');
+  const end = document.getElementById('endDate');
+  const durationText = document.getElementById('durationText');
+
+  function calculateDuration() {
+    if (start.value && end.value) {
+      const startDate = new Date(start.value);
+      const endDate = new Date(end.value);
+      const diffTime = endDate - startDate;
+      if (diffTime >= 0) {
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const months = (diffDays / 30.44).toFixed(1);
+        durationText.textContent = `${months} month(s)`;
+      } else {
+        durationText.textContent = "Invalid date range";
+      }
+    }
+  }
+
+  start.addEventListener('change', calculateDuration);
+  end.addEventListener('change', calculateDuration);
+
+  function toggleApproval() {
+    const checkbox = document.getElementById('isDirector');
+    const select = document.getElementById('approvalStatus');
+    select.disabled = !checkbox.checked;
+  }
+
+  function addMilestone() {
+    const container = document.getElementById('milestonesContainer');
+    const div = document.createElement('div');
+    div.className = 'milestone';
+    div.innerHTML = `
+      <input type="text" placeholder="Milestone description" required />
+      <input type="date" required />
+    `;
+    container.appendChild(div);
+  }
+
+  // Cost change history (INR)
+  let previousCost = document.getElementById('costEstimation').value;
+  const costInput = document.getElementById('costEstimation');
+  const costHistory = document.getElementById('costHistory');
+
+  costInput.addEventListener('change', () => {
+    const currentCost = costInput.value;
+    const now = new Date().toLocaleString();
+    if (previousCost && previousCost !== currentCost) {
+      const entry = `Previous: ₹${previousCost} on ${now}<br>`;
+      if (costHistory.innerHTML.includes("No changes yet.")) {
+        costHistory.innerHTML = "<strong>Change History:</strong><br>" + entry;
+      } else {
+        costHistory.innerHTML += entry;
+      }
+    }
+    previousCost = currentCost;
+  });
+
+  // Start/End Date history
+  let prevStartDate = start.value;
+  let prevEndDate = end.value;
+  const startDateHistory = document.getElementById('startDateHistory');
+  const endDateHistory = document.getElementById('endDateHistory');
+
+  start.addEventListener('change', () => {
+    const current = start.value;
+    const now = new Date().toLocaleString();
+    if (prevStartDate && prevStartDate !== current) {
+      const entry = `Previous: ${prevStartDate} on ${now}<br>`;
+      if (startDateHistory.innerHTML.includes("No changes yet.")) {
+        startDateHistory.innerHTML = "<strong>Start Date Change History:</strong><br>" + entry;
+      } else {
+        startDateHistory.innerHTML += entry;
+      }
+    }
+    prevStartDate = current;
+  });
+
+  end.addEventListener('change', () => {
+    const current = end.value;
+    const now = new Date().toLocaleString();
+    if (prevEndDate && prevEndDate !== current) {
+      const entry = `Previous: ${prevEndDate} on ${now}<br>`;
+      if (endDateHistory.innerHTML.includes("No changes yet.")) {
+        endDateHistory.innerHTML = "<strong>End Date Change History:</strong><br>" + entry;
+      } else {
+        endDateHistory.innerHTML += entry;
+      }
+    }
+    prevEndDate = current;
+  });
+
+  // Load navbar/footer
+  function loadContent() {
+    fetch('components/navbar.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('navbar-container').innerHTML = data);
+
+    fetch('components/footer.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('footer-container').innerHTML = data);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadContent();
+  });
+</script>
+
+</body>
+</html>

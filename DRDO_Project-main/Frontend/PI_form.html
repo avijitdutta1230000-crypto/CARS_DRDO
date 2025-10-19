@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scientist Project Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+    #progress-container {
+      max-width: 800px;
+      margin: 30px auto 10px;
+      padding: 0 20px;
+    }
+    #progress-bar {
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    #progress-bar::before {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 0%;
+      background-color: #28a745;
+      display: block;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+      left: 0; top: 0;
+      z-index: 1;
+    }
+    #progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 20px;
+    }
+    .step {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: #e0e0e0;
+      color: #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      z-index: 2;
+      position: relative;
+    }
+    .step.active {
+      background-color: #28a745;
+      color: white;
+    }
+    form {
+      max-width: 800px;
+      margin: auto;
+      background: #ffffff;
+      padding: 35px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .form-section {
+      display: none;
+    }
+    .form-section.active {
+      display: block;
+    }
+    h3 {
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 600;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin: 16px 0 6px;
+      font-weight: 500;
+      font-size: 15px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .milestone {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .milestone input {
+      flex: 1;
+    }
+    button[type="button"],
+    button[type="submit"] {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn-prev { background-color: #6c757d; color: white; margin-right: 10px; }
+    .btn-next { background-color: #28a745; color: white; }
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      font-weight: 600;
+    }
+    #durationText {
+      margin-top: 8px;
+      display: inline-block;
+      font-weight: 600;
+      color: #333;
+    }
+    .review-section {
+      margin-bottom: 20px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    .review-section:hover {
+      background: #f1f1f1;
+    }
+    .review-section h4 {
+      margin-bottom: 6px;
+      color: #555;
+    }
+    .review-section p {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-container"></div>
+
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+    <div id="progress-steps">
+      <span class="step active">1</span>
+      <span class="step">2</span>
+      <span class="step">3</span>
+      <span class="step">4</span>
+    </div>
+  </div>
+
+  <form id="projectForm">
+    <!-- Section 1 -->
+    <div class="form-section active">
+      <h3>Scientist Information</h3>
+      <label>Scientist Name</label>
+      <input type="text" name="scientistName" value="Rajmouli" readonly />
+
+      <label>Field of Study</label>
+      <input type="text" name="fieldOfStudy" required />
+
+      <button type="button" class="btn-next" onclick="nextSection()">Next</button>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="form-section">
+      <h3>Academic Details</h3>
+      <label>Academic Institute Name</label>
+      <input type="text" name="instituteName" required />
+
+      <label>Institute Address</label>
+      <textarea name="instituteAddress" required></textarea>
+
+     <label>Principal Investigator (PI) Name</label>
+<input type="text" name="piName" required autocomplete="off" id="piNameInput" />
+<div id="piSuggestions" style="border: 1px solid #ccc; background: white; max-height: 120px; overflow-y: auto; display: none; position: absolute; z-index: 10;"></div>
+
+      <label>PI Email</label>
+      <input type="email" name="piEmail" required />
+
+      <label>PI Contact Number</label>
+      <input type="text" name="piContact" required />
+
+      <button type="button" class="btn-prev" onclick="prevSection()">Previous</button>
+      <button type="button" class="btn-next" onclick="nextSection()">Next</button>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="form-section">
+      <h3>Project Details</h3>
+      <label>Project Title</label>
+      <input type="text" name="projectTitle" value="Neutrino Signal Mapping" readonly />
+
+      <label>Cost Estimation (INR)</label>
+      <input type="number" name="costEstimation" required />
+
+      <label>Start Date</label>
+      <input type="date" name="startDate" id="startDate" required />
+
+      <label>End Date</label>
+      <input type="date" name="endDate" id="endDate" required />
+
+      <label>Estimated Duration:</label>
+      <div id="durationText">—</div>
+
+      <label>Scope</label>
+      <textarea name="scope" required></textarea>
+
+      <label>Deliverables</label>
+      <textarea name="deliverables" required></textarea>
+
+      <label>Milestones</label>
+      <div id="milestonesContainer"></div>
+      <button type="button" onclick="addMilestone()">+ Add Milestone</button>
+
+      <button type="button" class="btn-prev" onclick="prevSection()">Previous</button>
+      <button type="button" class="btn-next" onclick="generateReview()">Next</button>
+    </div>
+
+    <!-- Section 4 (Review) -->
+    <div class="form-section" id="reviewSection">
+      <h3>Review & Confirm</h3>
+      <div id="reviewContent"></div>
+      <button type="button" class="btn-prev" onclick="prevSection()">Previous</button>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+
+  <div id="footer-container"></div>
+
+<script>
+  let currentSection = 0;
+  const sections = document.querySelectorAll('.form-section');
+  const steps = document.querySelectorAll('.step');
+  const progressBarBefore = document.querySelector('#progress-bar::before') || document.getElementById('progress-bar');
+
+  // Because ::before is a pseudo element, we can't select it directly with JS
+  // So, instead we will manipulate the width of a separate inner element or set inline style
+  // We'll add an inner div inside #progress-bar dynamically to show progress
+
+  const progressBar = document.getElementById('progress-bar');
+  const progressFill = document.createElement('div');
+  progressFill.style.height = '100%';
+  progressFill.style.width = '0%';
+  progressFill.style.backgroundColor = '#28a745';
+  progressFill.style.borderRadius = '4px';
+  progressFill.style.transition = 'width 0.3s ease';
+  progressFill.style.position = 'absolute';
+  progressFill.style.top = '0';
+  progressFill.style.left = '0';
+  progressFill.style.zIndex = '1';
+  progressBar.style.position = 'relative';
+  progressBar.appendChild(progressFill);
+
+  function updateProgressBar() {
+    const percentage = (currentSection / (sections.length - 1)) * 100;
+    progressFill.style.width = `${percentage}%`;
+    steps.forEach((step, index) => {
+      step.classList.toggle('active', index <= currentSection);
+    });
+  }
+
+  function showSection(index) {
+    sections.forEach((section, i) => {
+      section.classList.toggle('active', i === index);
+    });
+    updateProgressBar();
+  }
+
+  function nextSection() {
+    // Validate current section inputs before moving next
+    if (!validateCurrentSection()) return;
+
+    if (currentSection < sections.length - 1) {
+      currentSection++;
+      showSection(currentSection);
+    }
+  }
+
+  function prevSection() {
+    if (currentSection > 0) {
+      currentSection--;
+      showSection(currentSection);
+    }
+  }
+
+  function validateCurrentSection() {
+    const inputs = sections[currentSection].querySelectorAll('input, textarea, select');
+    for (const input of inputs) {
+      if (!input.checkValidity()) {
+        input.reportValidity();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function addMilestone() {
+    const container = document.getElementById('milestonesContainer');
+    const div = document.createElement('div');
+    div.className = 'milestone';
+    div.innerHTML = `
+      <input type="text" placeholder="Milestone description" required />
+      <input type="date" required />
+      <button type="button" title="Remove Milestone" style="background:#dc3545;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;margin-left:5px;">✕</button>
+    `;
+    // Remove milestone button
+    div.querySelector('button').addEventListener('click', () => {
+      container.removeChild(div);
+    });
+    container.appendChild(div);
+  }
+
+  const start = document.getElementById('startDate');
+  const end = document.getElementById('endDate');
+  const durationText = document.getElementById('durationText');
+
+  function calculateDuration() {
+    if (start.value && end.value) {
+      const startDate = new Date(start.value);
+      const endDate = new Date(end.value);
+      const diff = endDate - startDate;
+      if (diff >= 0) {
+        const months = (diff / (1000 * 60 * 60 * 24 * 30.44)).toFixed(1);
+        durationText.textContent = `${months} month(s)`;
+      } else {
+        durationText.textContent = "Invalid date range";
+      }
+    } else {
+      durationText.textContent = "—";
+    }
+  }
+
+  start.addEventListener('change', calculateDuration);
+  end.addEventListener('change', calculateDuration);
+
+  function generateReview() {
+    if (!validateCurrentSection()) return;
+
+    const form = document.getElementById('projectForm');
+    const data = new FormData(form);
+    const reviewDiv = document.getElementById('reviewContent');
+    reviewDiv.innerHTML = '';
+
+    const fields = {
+      0: ["scientistName", "fieldOfStudy"],
+      1: ["instituteName", "instituteAddress", "piName", "piEmail", "piContact"],
+      2: ["projectTitle", "costEstimation", "startDate", "endDate", "scope", "deliverables"]
+    };
+
+    Object.entries(fields).forEach(([sectionIndex, fieldNames]) => {
+      const div = document.createElement('div');
+      div.className = 'review-section';
+      div.onclick = () => {
+        currentSection = parseInt(sectionIndex);
+        showSection(currentSection);
+      };
+      div.innerHTML = `<h4>Section ${parseInt(sectionIndex) + 1}</h4>`;
+      fieldNames.forEach(name => {
+        const value = data.get(name) || "—";
+        div.innerHTML += `<p><strong>${name.replace(/([A-Z])/g, ' $1')}:</strong> ${value}</p>`;
+      });
+
+      // Add Milestones if section 2
+      if (parseInt(sectionIndex) === 2) {
+        const milestones = document.querySelectorAll('#milestonesContainer .milestone');
+        if (milestones.length > 0) {
+          div.innerHTML += `<p><strong>Milestones:</strong></p>`;
+          milestones.forEach((milestone, index) => {
+            const inputs = milestone.querySelectorAll('input');
+            if (inputs.length === 2) {
+              div.innerHTML += `<p>- ${inputs[0].value || '—'} (${inputs[1].value || '—'})</p>`;
+            }
+          });
+        }
+      }
+
+      reviewDiv.appendChild(div);
+    });
+
+    nextSection();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    showSection(currentSection);
+    calculateDuration();
+  });
+
+  // Load navbar and footer content if you have those files
+  function loadContent() {
+    fetch('components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+
+    fetch('components/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      })
+      .catch(error => console.error('Error loading footer:', error));
+  }
+  document.addEventListener('DOMContentLoaded', loadContent);
+
+  // Handle form submission
+  const form = document.getElementById('projectForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Validate all fields before submission
+    for (let i = 0; i < sections.length; i++) {
+      currentSection = i;
+      showSection(currentSection);
+      if (!validateCurrentSection()) {
+        alert('Please fill all required fields correctly before submitting.');
+        return;
+      }
+    }
+
+    // Gather all form data including milestones
+    const formData = new FormData(form);
+    const milestones = [];
+    document.querySelectorAll('#milestonesContainer .milestone').forEach(milestone => {
+      const inputs = milestone.querySelectorAll('input');
+      milestones.push({
+        description: inputs[0].value,
+        date: inputs[1].value
+      });
+    });
+
+    // Create JSON object to send
+    const jsonData = {};
+    formData.forEach((value, key) => {
+      jsonData[key] = value;
+    });
+    jsonData.milestones = milestones;
+
+    const token = localStorage.getItem('token'); // Make sure token is stored after login
+
+    try {
+      const response = await fetch('/api/piform/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(jsonData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message || 'Form submitted successfully!');
+        form.reset();
+        currentSection = 0;
+        showSection(currentSection);
+        document.getElementById('milestonesContainer').innerHTML = '';
+        durationText.textContent = '—';
+      } else {
+        alert(result.message || 'Submission failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('An error occurred. Please try again later.');
+    }
+  });
+
+  const instituteInput = document.querySelector('input[name="instituteName"]');
+const piInput = document.getElementById('piNameInput');
+const piSuggestions = document.getElementById('piSuggestions');
+
+// Position suggestion box below piInput
+piSuggestions.style.width = piInput.offsetWidth + 'px';
+piInput.parentElement.style.position = 'relative';
+
+instituteInput.addEventListener('blur', async () => {
+  const institute = instituteInput.value.trim();
+  if (!institute) {
+    piSuggestions.style.display = 'none';
+    return;
+  }
+
+  try {
+    // Call your backend API to get existing PIs for this institute
+    const token = localStorage.getItem('token'); // if needed for auth
+    const response = await fetch(`/api/piform/pi-list?institute=${encodeURIComponent(institute)}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!response.ok) throw new Error('Failed to fetch PI list');
+
+    const piList = await response.json(); // Expect an array of PI names
+
+    if (piList.length === 0) {
+      piSuggestions.style.display = 'none';
+      return;
+    }
+
+    // Show suggestions
+    piSuggestions.innerHTML = '';
+    piList.forEach(pi => {
+      const div = document.createElement('div');
+      div.textContent = pi;
+      div.style.padding = '6px 8px';
+      div.style.cursor = 'pointer';
+
+      div.addEventListener('click', () => {
+        piInput.value = pi;
+        piSuggestions.style.display = 'none';
+      });
+
+      div.addEventListener('mouseover', () => div.style.backgroundColor = '#eee');
+      div.addEventListener('mouseout', () => div.style.backgroundColor = '');
+
+      piSuggestions.appendChild(div);
+    });
+    piSuggestions.style.display = 'block';
+  } catch (err) {
+    console.error(err);
+    piSuggestions.style.display = 'none';
+  }
+});
+
+// Hide suggestions when clicking outside
+document.addEventListener('click', (e) => {
+  if (!piSuggestions.contains(e.target) && e.target !== piInput) {
+    piSuggestions.style.display = 'none';
+  }
+});
+
+</script>
+
+</body>
+</html>

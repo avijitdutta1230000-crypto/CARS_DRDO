@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .about-section {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .about-section h2 {
+      color: #333;
+    }
+    .about-section p {
+      line-height: 1.6;
+    }
+    </style>
+</head>
+<body>
+
+  <!-- Placeholder for Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- About Us Section -->
+  <section id="about-us-section" class="about-section">
+    <h2>About Us</h2>
+    <p>Solid State Physics Laboratory (SSPL) is engaged in the research and development of advanced semiconductor materials and devices. Several solid-state devices like Gunn, Schottky Barrier and IMPATT Diodes, monolithic microwave integrated circuits, high-power laser diodes, quadrant detectors, single pole single throw switches, PIN photodiodes, space-quality solar cells, accelerometers, linear infrared Arrays, Thermoelectric coolers, phase shifters, hydrophones, SAW-based e-Nasika have been developed at SSPL. Device quality II-VI/III-V semiconductor crystals and heterostructures have also been developed by the Lab.</p>
+    <p>Our team consists of skilled professionals who are passionate about technology, customer satisfaction, and continuous improvement.</p>
+  </section>
+
+  <!-- Placeholder for Footer -->
+  <div id="footer-container"></div>
+
+  <script>
+    // Function to load content from HTML files (navbar.html, footer.html)
+    function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+  </script>
+
+</body>
+</html>

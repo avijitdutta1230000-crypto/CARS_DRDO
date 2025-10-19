@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSPL DRDO Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #264f7a;
+      --secondary-color: #1976d2;
+      --dark-color: #333;
+      --light-color: #f9f9f9;
+      --danger-color: #dc3545;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+
+    .header {
+      background-color: var(--primary-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header img {
+      height: 80px;
+      width: auto;
+    }
+
+    .header-text {
+      color: white;
+    }
+
+    .header-text h1 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    .header-text p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .navbar {
+      background-color: var(--dark-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 5px;
+    }
+
+    .navbar a {
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .navbar a:hover {
+      background-color: #575757;
+      color: white;
+    }
+
+    .navbar a.active {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .navbar button {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .navbar button:hover {
+      background-color: #145ca1;
+      transform: translateY(-2px);
+    }
+
+    /* Mobile menu button */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 25px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      animation: slideDown 0.4s;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .close {
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+      color: #aaa;
+      transition: color 0.3s;
+    }
+
+    .close:hover {
+      color: var(--danger-color);
+    }
+
+    .modal-content h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .modal-content form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-content label {
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .modal-content input, .modal-content select {
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+
+    .modal-content input:focus, .modal-content select:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+    }
+
+    .login-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .login-options button, .signup-options button {
+      padding: 12px;
+      border: none;
+      background-color: var(--secondary-color);
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .login-options button:hover, .signup-options button:hover {
+      background-color: #145ca1;
+      transform: translateY(-2px);
+    }
+
+    .login-options button i, .signup-options button i {
+      font-size: 1.1rem;
+    }
+
+    .signup-link, .login-link {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .signup-link a, .login-link a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .signup-link a:hover, .login-link a:hover {
+      color: #145ca1;
+      text-decoration: underline;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: -10px;
+    }
+
+    .forgot-password a {
+      color: #666;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .forgot-password a:hover {
+      color: var(--secondary-color);
+    }
+
+    /* User type selection */
+    .user-type-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .user-type-selector label {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .user-type-selector input[type="radio"] {
+      display: none;
+    }
+
+    .user-type-selector input[type="radio"]:checked + label {
+      background-color: var(--secondary-color);
+      color: white;
+      border-color: var(--secondary-color);
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 80vh;
+      background: linear-gradient(rgba(38, 79, 122, 0.8), rgba(38, 79, 122, 0.8)), 
+                  url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      position: relative;
+      padding: 0 20px;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .hero-btn {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 15px 30px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .hero-btn:hover {
+      background-color: #145ca1;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-btn.secondary {
+      background-color: transparent;
+      border: 2px solid white;
+    }
+
+    .hero-btn.secondary:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* About Section */
+    .section {
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: var(--primary-color);
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background-color: var(--secondary-color);
+      border-radius: 2px;
+    }
+
+    .section-text {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      color: #555;
+    }
+
+    #about {
+      background-color: white;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .feature-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+
+    /* Services Section */
+    #services {
+      background-color: var(--light-color);
+    }
+
+    /* What's New Section */
+    #whats-new {
+      background-color: var(--light-color);
+    }
+
+    .news-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .news-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .news-title {
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--secondary-color);
+      padding-bottom: 5px;
+    }
+
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .news-item {
+      padding: 20px;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      transition: all 0.3s;
+      border-left: 4px solid var(--secondary-color);
+    }
+
+    .news-item:hover {
+      background-color: #f0f0f0;
+      transform: translateX(5px);
+    }
+
+    .news-item-date {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .news-item-title {
+      font-size: 1.1rem;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .news-badge {
+      background-color: var(--warning-color);
+      color: #333;
+      font-weight: bold;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 10px;
+      margin-left: 10px;
+      display: inline-block;
+    }
+
+    .view-all {
+      display: inline-block;
+      margin-top: 30px;
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .view-all:hover {
+      color: #145ca1;
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 50px 20px 20px;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: white;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background-color: var(--secondary-color);
+    }
+
+    .footer-column p {
+      margin-bottom: 15px;
+      opacity: 0.8;
+      font-size: 0.95rem;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+      color: var(--secondary-color);
+    }
+
+    .footer-links i {
+      font-size: 0.8rem;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .social-links a:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 992px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .header-text {
+        margin-bottom: 15px;
+      }
+
+      .navbar-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: var(--dark-color);
+        padding: 10px 0;
+      }
+
+      .navbar-links.active {
+        display: flex;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .hero {
+        height: 70vh;
+      }
+
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+
+      .hero-content p {
+        font-size: 1rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .hero-btn {
+        width: 100%;
+      }
+
+      .section {
+        padding: 60px 20px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .modal-content {
+        padding: 20px 15px;
+      }
+
+      .hero-content h1 {
+        font-size: 1.8rem;
+      }
+      
+      .user-type-selector {
+        flex-direction: column;
+      }
+    }
+
+    /* Logo container styles */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-container img {
+      height: 80px;
+      width: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-container">
+                  <img src="./Assets/SSPL_logo.png" alt="SSPL DRDO Logo">
+      
+    </div>
+    <div class="header-text">
+            <img src="./Assets/Tho_logo.png" alt="DRDO Logo">
+      <h1>SSPL DRDO</h1>
+      <p>Solid State Physics Laboratory, Defence Research & Development Organisation</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="navbar">
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="navbar-links" id="navbarLinks">
+      <a href="#home" class="active"><i class="fas fa-home"></i> Home</a>
+      <a href="#about"><i class="fas fa-info-circle"></i> About</a>
+      <a href="#services"><i class="fas fa-cogs"></i> Services</a>
+      <a href="#whats-new"><i class="fas fa-newspaper"></i> What's New</a>
+      <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+    </div>
+    <div>
+      <button id="openLoginModal"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">×</span>
+      <h2>Login to Portal</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="userid">User ID</label>
+          <input type="text" id="userid" name="userid" placeholder="Enter your user ID" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+          <div class="forgot-password">
+            <a href="#"><i class="fas fa-key"></i> Forgot Password?</a>
+          </div>
+        </div>
+
+        <div class="login-options">
+          <button type="submit"><i class="fas fa-user-shield"></i> Login as Admin</button>
+          <button type="submit"><i class="fas fa-university"></i> Login as Institute</button>
+          <button type="submit"><i class="fas fa-user-tie"></i> Login as Director</button>
+       
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Advancing Defense Technologies Through Research</h1>
+      <p>SSPL DRDO is committed to excellence in solid state physics research for national security applications.</p>
+      <div class="hero-buttons">
+        <button class="hero-btn" onclick="document.getElementById('about').scrollIntoView({ behavior: 'smooth' })">
+          <i class="fas fa-book-open"></i> Learn More
+        </button>
+        <button class="hero-btn secondary" id="openLoginModal2">
+          <i class="fas fa-user-lock"></i> Member Login
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section" id="about">
+    <h2 class="section-title">About SSPL DRDO</h2>
+    <p class="section-text">
+      The Solid State Physics Laboratory (SSPL) of DRDO is a premier laboratory engaged in research and development 
+      of advanced materials and devices for defense applications. Our mission is to develop cutting-edge technologies 
+      in the field of solid state physics to meet the requirements of the Indian Armed Forces.
+    </p>
+    
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-flask"></i>
+        </div>
+        <h3>Research Excellence</h3>
+        <p>World-class research facilities and expertise in materials science, semiconductor devices, and quantum technologies.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Defense Applications</h3>
+        <p>Developing critical technologies for radar systems, night vision, communication, and electronic warfare.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Collaborative Ecosystem</h3>
+        <p>Strong partnerships with academic institutions, industries, and other DRDO labs for technology development.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="section" id="services">
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-text">
+      SSPL DRDO offers specialized services to facilitate research and professional collaborations for defense technology development.
+    </p>
+    
+    <div class="features">
+      <div class="feature-card" onclick="window.location.href='cars.html'">
+        <div class="feature-icon">
+          <i class="fas fa-file-contract"></i>
+        </div>
+        <h3>CARS</h3>
+        <p>Contract of Acquisition of Research Service (CARS) enables collaboration with academic and research institutions to drive innovative defense research.</p>
+      </div>
+      
+      <div class="feature-card" onclick="window.location.href='capsi.html'">
+        <div class="feature-icon">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <h3>CAPSI</h3>
+        <p>Contract for Acquisition of Professional Services through IDST (CAPSI) facilitates engagement of professional expertise for specialized defense projects.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What's New Section -->
+  <section class="section" id="whats-new">
+    <h2 class="section-title">What's New</h2>
+    <p class="section-text">
+      Stay updated with the latest announcements, opportunities, and developments at SSPL DRDO.
+    </p>
+    
+    <div class="news-container">
+      <div class="news-header">
+        <h3 class="news-title">Latest Updates</h3>
+      </div>
+      
+      <div class="news-list" id="newsList">
+        <!-- News items will be dynamically inserted here -->
+      </div>
+      
+      <a href="#" class="view-all" id="viewAllLink">
+        <span>View All Announcements</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>About SSPL</h3>
+        <p>The Solid State Physics Laboratory (SSPL) is a premier laboratory of DRDO engaged in research and development of advanced materials and devices.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+          <li><a href="#whats-new"><i class="fas fa-chevron-right"></i> What's New</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Tenders</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact Us</h3>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-map-marker-alt"></i> Lucknow Road, Timarpur, Delhi - 110054</a></li>
+          <li><a href="tel:+911123904101"><i class="fas fa-phone"></i> +91-11-23904101</a></li>
+          <li><a href="mailto:director@sspl.drdo.in"><i class="fas fa-envelope"></i> director@sspl.drdo.in</a></li>
+          <li><a href="#"><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 5:30 PM</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>© 2023 SSPL DRDO. All Rights Reserved. | Designed and Maintained by SSPL IT Team</p>
+    </div>
+  </footer>
+
+  <script>
+    // Modal functionality
+    const loginModal = document.getElementById("loginModal");
+    const loginBtn = document.getElementById("openLoginModal");
+    const loginBtn2 = document.getElementById("openLoginModal2");
+    const closeButtons = document.getElementsByClassName("close");
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const navbarLinks = document.getElementById("navbarLinks");
+
+    // Open login modal
+    loginBtn.onclick = function() {
+      loginModal.style.display = "block";
+      document.body.style.overflow = "hidden";
+    }
+
+    loginBtn2.onclick = function() {
+      loginModal.style.display = "block";
+      document.body.style.overflow = "hidden";
+    }
+
+    // Close modals
+    for (let i = 0; i < closeButtons.length; i++) {
+      closeButtons[i].onclick = function() {
+        loginModal.style.display = "none";
+        document.body.style.overflow = "auto";
+      }
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target === loginModal) {
+        loginModal.style.display = "none";
+        document.body.style.overflow = "auto";
+      }
+    }
+
+    // Toggle mobile menu
+    mobileMenuBtn.onclick = function() {
+      navbarLinks.classList.toggle("active");
+    }
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('.navbar-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navbarLinks.classList.remove("active");
+      });
+    });
+
+    // Form submission
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  
+  const userid = document.getElementById("userid").value;
+  const password = document.getElementById("password").value;
+  
+  try {
+    const response = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userid, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Store token and user data
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
+      // Redirect based on user type
+      switch(data.user.user_type) {
+        case 'admin':
+          window.location.href = 'admin-dashboard.html';
+          break;
+        case 'institute':
+          window.location.href = 'institute-dashboard.html';
+          break;
+        case 'director':
+          window.location.href = 'director-dashboard.html';
+          break;
+        default:
+          window.location.href = 'dashboard.html';
+      }
+    } else {
+      alert(data.error || 'Login failed');
+    }
+  } catch (err) {
+    console.error('Login error:', err);
+    alert('Login failed. Please try again.');
+  } finally {
+    loginModal.style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+});
+
+    // News data
+    const newsData = [
+      {
+        date: '09/05/2025',
+        title: 'Advertisement for the Post of Director, DIA-CoE, IIT Delhi',
+        isNew: true
+      },
+      {
+        date: '09/05/2025',
+        title: 'Announcement for the Post of Director, DIA RCoE, IIT Madras - Advt.85/2025',
+        isNew: true
+      },
+      {
+        date: '08/05/2025',
+        title: 'Engagement of retired Government Officials as Consultant on Contract Basis in DRDO',
+        isNew: true
+      },
+      {
+        date: '05/05/2025',
+        title: 'Advertisement for engaging Technician Apprentices under the Apprentices Act 1961',
+        isNew: false
+      },
+      {
+        date: '03/05/2025',
+        title: 'SSPL Annual Research Symposium 2025 - Call for Papers',
+        isNew: false
+      }
+    ];
+
+    // Render news items
+    const newsList = document.getElementById("newsList");
+    
+    newsData.forEach(item => {
+      const newsItem = document.createElement("div");
+      newsItem.className = "news-item";
+      
+      newsItem.innerHTML = `
+        <div class="news-item-date">${item.date}</div>
+        <div class="news-item-title">
+          ${item.title}
+          ${item.isNew ? '<span class="news-badge">NEW</span>' : ''}
+        </div>
+      `;
+      
+      newsList.appendChild(newsItem);
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Active link highlighting
+    window.addEventListener('scroll', function() {
+      const scrollPosition = window.scrollY;
+      
+      document.querySelectorAll('section').forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+          document.querySelectorAll('.navbar-links a').forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${sectionId}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+

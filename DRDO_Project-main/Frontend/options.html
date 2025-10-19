@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Option</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+    }
+    h1 {
+
+        margin-top: 4rem;
+      padding: 20px ,40px;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 20px;
+  padding: 20px; 
+  margin-bottom: 30px;    
+}
+    td {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      vertical-align: top;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 18px;
+      font-weight: 500;
+      color: #555;
+      text-align: left;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #004b9c;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #304d6c;
+    }
+    @media (max-width: 768px) {
+      table, tbody, tr, td {
+        display: block;
+        width: 100%;
+      }
+      td {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    
+  <div class="container">
+    <h1>Select a Service Request</h1>
+    <table>
+      <tr>
+        <td>
+          <h2>CARS</h2>
+          <p>
+            The Contract for Acquisition of Research Services (CARS) is a DRDO initiative designed to foster research collaborations with academic and research institutions. Under the CARS scheme, DRDO sponsors research projects that align with its strategic objectives, enabling institutions to contribute to defense research and development.
+          </p>
+          <button class="btn" onclick="location.href='RSQR._scientist.html'"> CARS</button>
+        </td>
+         <td>
+          <h2>CAPSI</h2>
+          <p>
+            The Contract for Acquisition of Professional Services through IDST (CAPSI) is a strategic framework established by the Defence Research and Development Organisation (DRDO) to engage external entities in defense-related projects. This initiative facilitates collaboration with private industries, and research organizations to undertake projects that contribute to the development of advanced defense technologies. CAPSI aims to leverage external expertise and innovation to accelerate the research and development process, ensuring that the Indian defense sector remains at the forefront of technological advancements.
+          </p>
+          <button class="btn" onclick="location.href='PSQR_scientist.html'"> CAPSI</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="footer-container"></div>
+
+</body>
+<Script>
+     function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+
+</Script>
+</html>

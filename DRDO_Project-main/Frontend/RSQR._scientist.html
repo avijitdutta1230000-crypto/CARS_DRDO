@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scientist Project Submission</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    form {
+      max-width: 750px;
+      margin: auto;
+      background-color: #fff;
+      margin-bottom: 20px;
+      margin-top: 20px;
+      padding: 3rem 4rem; 
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    fieldset {
+      border: none;
+      margin-bottom: 1.5rem;
+    }
+
+    legend {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .submit-btn {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .director-toggle {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .duration-display {
+      margin-top: 0.5rem;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    input[readonly], textarea[readonly] {
+      background-color: #f9f9f9;
+      color: #555;
+    }
+    .form-intro {
+  max-width: 900px;
+  margin: 2rem auto 1rem auto;
+  padding: 0 1rem;
+}
+
+.form-intro h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #222;
+  text-align: center;
+}
+
+.form-intro p {
+  font-size: 1.05rem;
+  color: #444;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+
+  </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<section class="form-intro">
+    <h2>RSQR Submission Form</h2>
+    <p>
+      This RSQR (Research Service Quality Request) form is to be filled by scientists who are requesting research services from the academic institute. 
+      It is used to raise a formal request for a research project, outlining key details including the project scope, timeline, and funding estimation.
+    </p>
+  </section>
+  
+
+<form id="scientistForm">
+  <!-- Section 1 -->
+  <fieldset>
+    <legend>Scientist Information</legend>
+    <label for="scientistName">Scientist Name</label>
+    <input type="text" id="scientistName" required>
+
+    <label for="fieldOfStudy">Field of Study</label>
+    <input type="text" id="fieldOfStudy" required>
+  </fieldset>
+
+  <!-- Section 2 -->
+  <fieldset>
+    <legend>Project Details</legend>
+    <label for="projectTitle">Project Title</label>
+    <input type="text" id="projectTitle" required>
+
+    <label for="costEstimation">Cost Estimation (USD)</label>
+    <input type="number" id="costEstimation" step="0.01" required>
+
+    <label for="startDate">Start Date</label>
+    <input type="date" id="startDate" required>
+
+    <label for="endDate">End Date</label>
+    <input type="date" id="endDate" required>
+
+    <div id="duration" class="duration-display">Estimated Duration: —</div>
+
+    <label for="scope">Scope</label>
+    <textarea id="scope" rows="4" required></textarea>
+
+    <label for="deliverables">Deliverables</label>
+    <textarea id="deliverables" rows="4" required></textarea>
+  </fieldset>
+
+  <!-- Section 3 -->
+  <fieldset>
+    <legend>Approval Section (Director Use Only)</legend>
+
+    <div class="director-toggle">
+      <input type="checkbox" id="isDirector">
+      <label for="isDirector">I am the Director (Enable approval status)</label>
+    </div>
+
+    <label for="approvalStatus">Approval Status</label>
+    <select id="approvalStatus" disabled required>
+      <option value="pending" selected>Pending</option>
+      <option value="approved">Approved</option>
+      <option value="rejected">Rejected</option>
+    </select>
+  </fieldset>
+
+  <button type="submit" class="submit-btn">Submit Form</button>
+</form>
+
+
+<div id="footer-container"></div>
+
+<script>
+  const form = document.getElementById('scientistForm');
+  const isDirectorCheckbox = document.getElementById('isDirector');
+  const approvalStatus = document.getElementById('approvalStatus');
+
+  const startDateInput = document.getElementById('startDate');
+  const endDateInput = document.getElementById('endDate');
+  const durationDisplay = document.getElementById('duration');
+
+  const editableFieldsAfterSubmit = ['startDate', 'endDate', 'costEstimation'];
+
+  isDirectorCheckbox.addEventListener('change', () => {
+    approvalStatus.disabled = !isDirectorCheckbox.checked;
+  });
+
+  function calculateMonths(start, end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (endDate < startDate) return "Invalid date range";
+
+    const years = endDate.getFullYear() - startDate.getFullYear();
+    const months = endDate.getMonth() - startDate.getMonth();
+
+    const totalMonths = years * 12 + months + 1;
+    return totalMonths > 0 ? `${totalMonths} month(s)` : "0 month";
+  }
+
+  function updateDurationDisplay() {
+    const start = startDateInput.value;
+    const end = endDateInput.value;
+
+    if (start && end) {
+      const duration = calculateMonths(start, end);
+      durationDisplay.textContent = `Estimated Duration: ${duration}`;
+    } else {
+      durationDisplay.textContent = "Estimated Duration: —";
+    }
+  }
+
+  startDateInput.addEventListener('change', updateDurationDisplay);
+  endDateInput.addEventListener('change', updateDurationDisplay);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const formData = {
+      scientistName: document.getElementById('scientistName').value.trim(),
+      fieldOfStudy: document.getElementById('fieldOfStudy').value.trim(),
+      projectTitle: document.getElementById('projectTitle').value.trim(),
+      costEstimation: document.getElementById('costEstimation').value,
+      startDate: startDateInput.value,
+      endDate: endDateInput.value,
+      duration: durationDisplay.textContent.replace("Estimated Duration: ", ""),
+      scope: document.getElementById('scope').value.trim(),
+      deliverables: document.getElementById('deliverables').value.trim(),
+      approvalStatus: approvalStatus.value
+    };
+
+    console.log("Form Submitted:", formData);
+    alert("Form submitted successfully!");
+
+    // Lock all fields except editable ones
+    Array.from(form.elements).forEach(el => {
+      if (el.tagName !== "BUTTON") {
+        if (!editableFieldsAfterSubmit.includes(el.id)) {
+          el.readOnly = true;
+          el.disabled = true;
+        } else {
+          el.readOnly = false;
+          el.disabled = false;
+        }
+      }
+    });
+
+    isDirectorCheckbox.disabled = true;
+  });
+
+
+    // Function to load content from HTML files (navbar.html, footer.html)
+    function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+
+
+    
+  
+</script>
+
+</body>
+</html>

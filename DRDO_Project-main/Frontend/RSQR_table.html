@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RSQR Request Service Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 0;
+      margin: 0;
+      background-color: #f0f2f5;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .controls select, .controls button {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border: 1px solid #ddd;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: #004080;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    th.clicked {
+      text-decoration: underline;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .status {
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .active {
+      background-color: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .closed {
+      background-color: #f8d7da;
+      color: #842029;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+
+  <h2>RSQR Request Service Table</h2>
+
+  <div class="controls">
+    <label for="statusFilter">Filter by Status:</label>
+    <select id="statusFilter" onchange="filterTable()">
+      <option value="All">All</option>
+      <option value="Closed">Pre-Active</option>
+      <option value="Closed">Ongoing</option>
+      <option value="Closed">Due for Closure</option>
+      <option value="Closed">Closed</option>
+
+    </select>
+    <button onclick="exportToExcel()">Export to Excel</button>
+    <button onclick="exportToPDF()">Export to PDF</button>
+  </div>
+
+  <table id="rsqrTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">File Number</th>
+        <th onclick="sortTable(1)">Project Name</th>
+        <th onclick="sortTable(2)">Scientist Name</th>
+        <th onclick="sortTable(3)">Scope</th>
+        <th onclick="sortTable(4)">Remark</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>RSQR/2024/001</td>
+        <td>Drone Swarm Control System</td>
+        <td>Dr. Kavita Menon</td>
+        <td>Real-time coordinated AI swarm behavior</td>
+        <td><span class="status active">Active</span></td>
+      </tr>
+      <tr>
+        <td>RSQR/2024/002</td>
+        <td>Advanced Camouflage Material</td>
+        <td>Dr. Sandeep Verma</td>
+        <td>Dynamic optical camouflage material testing</td>
+        <td><span class="status closed">Closed</span></td>
+      </tr>
+      <tr>
+        <td>RSQR/2024/003</td>
+        <td>Quantum Communication Link</td>
+        <td>Dr. Ritu Singh</td>
+        <td>Secure quantum data transmission</td>
+        <td><span class="status active">Active</span></td>
+      </tr>
+      <tr>
+        <td>RSQR/2024/004</td>
+        <td>Underwater Surveillance Robot</td>
+        <td>Dr. Manoj Pillai</td>
+        <td>Deep-sea sensor and control algorithm development</td>
+        <td><span class="status closed">Closed</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SheetJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- jsPDF & html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script>
+    function sortTable(n) {
+      const table = document.getElementById("rsqrTable");
+      const headers = table.getElementsByTagName("th");
+
+      for (let h of headers) {
+        h.classList.remove("clicked");
+      }
+      headers[n].classList.add("clicked");
+
+      let switching = true;
+      let dir = "asc";
+      let switchcount = 0;
+
+      while (switching) {
+        switching = false;
+        const rows = table.rows;
+        for (let i = 1; i < rows.length - 1; i++) {
+          let shouldSwitch = false;
+          const x = rows[i].getElementsByTagName("TD")[n];
+          const y = rows[i + 1].getElementsByTagName("TD")[n];
+          const xText = x.textContent || x.innerText;
+          const yText = y.textContent || y.innerText;
+
+          if (dir === "asc") {
+            if (xText.toLowerCase() > yText.toLowerCase()) {
+              shouldSwitch = true;
+              break;
+            }
+          } else if (dir === "desc") {
+            if (xText.toLowerCase() < yText.toLowerCase()) {
+              shouldSwitch = true;
+              break;
+            }
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount++;
+        } else {
+          if (switchcount === 0 && dir === "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+
+    function filterTable() {
+      const filter = document.getElementById("statusFilter").value.toLowerCase();
+      const table = document.getElementById("rsqrTable");
+      const trs = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < trs.length; i++) {
+        const remark = trs[i].getElementsByTagName("td")[4].textContent.toLowerCase();
+        trs[i].style.display = (filter === "all" || remark.includes(filter)) ? "" : "none";
+      }
+    }
+
+    function exportToExcel() {
+      const table = document.getElementById("rsqrTable");
+      const wb = XLSX.utils.table_to_book(table, { sheet: "RSQR Table" });
+      XLSX.writeFile(wb, "RSQR_Table.xlsx");
+    }
+
+    async function exportToPDF() {
+      const table = document.getElementById("rsqrTable");
+
+      const canvas = await html2canvas(table, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF("l", "pt", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, "PNG", 20, 20, pdfWidth - 40, pdfHeight);
+      pdf.save("RSQR_Table.pdf");
+    }
+
+       function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+    
+  </script>
+<div id="footer-container"></div>
+
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CARS Table</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 0;
+      background-color: #f4f6f9;
+      margin: 0;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 20px 0 10px;
+      color: #333;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .controls select, .controls button {
+      padding: 8px 12px;
+      margin: 5px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border: 1px solid #ddd;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: #004080;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #e9f0ff;
+      cursor: pointer;
+    }
+
+    .status {
+      font-weight: bold;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .pre-active {
+      background-color: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .ongoing {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .due-closure {
+      background-color: #fde2e2;
+      color: #8b0000;
+    }
+
+    .closed {
+      background-color: #d4edda;
+      color: #155724;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar-container"></div>
+
+  <h2>Project Details Table</h2>
+
+  <div class="controls">
+    <select id="statusFilter" onchange="filterStatus()">
+      <option value="all">Filter by Remarks</option>
+      <option value="Pre-Active">Pre-Active</option>
+      <option value="Ongoing">Ongoing</option>
+      <option value="Due for Closure">Due for Closure</option>
+      <option value="Closed">Closed</option>
+    </select>
+    <button onclick="exportTableToExcel()">Export to Excel</button>
+    <button onclick="exportTableToPDF()">Export to PDF</button>
+  </div>
+
+  <div style="padding: 0 20px;">
+  <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search projects..." style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px;">
+</div>
+
+  <table id="projectTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Serial No.</th>
+        <th onclick="sortTable(1)">Project No.</th>
+        <th onclick="sortTable(2)">Title</th>
+        <th onclick="sortTable(3)">Academic Name & Address</th>
+        <th onclick="sortTable(4)">Scientist Name</th>
+        <th onclick="sortTable(5)">Sanction Date</th>
+        <th onclick="sortTable(6)">Start Date</th>
+        <th onclick="sortTable(7)">PDC</th>
+        <th onclick="sortTable(8)">Extension</th>
+        <th onclick="sortTable(9)">Cost & Revision</th>
+        <th onclick="sortTable(10)">Milestone</th>
+        <th onclick="sortTable(11)">Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr onclick="rowClicked(this)">
+        <td>1</td>
+        <td>DRDO/CARS/2023-045</td>
+        <td>AI-Powered Surveillance</td>
+        <td>Dr. A. Kumar<br> IIT Delhi, Hauz Khas</td>
+        <td>Dr. Meena Sharma</td>
+        <td>12-Feb-2023</td>
+        <td>01-Mar-2023</td>
+        <td>30-Nov-2023</td>
+        <td>No</td>
+        <td>₹75L<br>(Revised ₹80L)</td>
+        <td>Phase 1 complete</td>
+        <td><span class="status pre-active">Pre-Active</span></td>
+      </tr>
+      <tr onclick="rowClicked(this)">
+        <td>2</td>
+        <td>DRDO/CARS/2023-068</td>
+        <td>High-Speed Communication Module</td>
+        <td>Prof. R. Nair<br> IISc Bangalore</td>
+        <td>Dr. S. Joshi</td>
+        <td>20-Mar-2023</td>
+        <td>15-Apr-2023</td>
+        <td>15-Jan-2024</td>
+        <td>Yes (30 days)</td>
+        <td>₹60L</td>
+        <td>Design in progress</td>
+        <td><span class="status ongoing">Ongoing</span></td>
+      </tr>
+      <tr onclick="rowClicked(this)">
+        <td>3</td>
+        <td>DRDO/CARS/2023-079</td>
+        <td>Smart Armor Material Study</td>
+        <td>Dr. P. Roy<br> Jadavpur University</td>
+        <td>Dr. A. Singh</td>
+        <td>10-Apr-2023</td>
+        <td>01-May-2023</td>
+        <td>31-Dec-2023</td>
+        <td>No</td>
+        <td>₹45L</td>
+        <td>Proposal stage</td>
+        <td><span class="status due-closure">Due for Closure</span></td>
+      </tr>
+      <tr onclick="rowClicked(this)">
+        <td>4</td>
+        <td>DRDO/CARS/2023-082</td>
+        <td>Ballistic Shield Testing</td>
+        <td>Dr. M. Bansal<br> NIT Trichy</td>
+        <td>Dr. V. Reddy</td>
+        <td>05-May-2023</td>
+        <td>20-May-2023</td>
+        <td>20-Jan-2024</td>
+        <td>No</td>
+        <td>₹55L</td>
+        <td>Testing completed</td>
+        <td><span class="status closed">Closed</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div id="footer-container"></div>
+
+  <script>
+    function sortTable(n) {
+      const table = document.getElementById("projectTable");
+      let rows = Array.from(table.rows).slice(1);
+      const isNumeric = !isNaN(rows[0].cells[n].innerText.trim());
+
+      rows.sort((rowA, rowB) => {
+        const cellA = rowA.cells[n].innerText.trim();
+        const cellB = rowB.cells[n].innerText.trim();
+        return isNumeric
+          ? parseFloat(cellA.replace(/[^\d.-]/g, '')) - parseFloat(cellB.replace(/[^\d.-]/g, ''))
+          : cellA.localeCompare(cellB);
+      });
+
+      rows.forEach(row => table.appendChild(row));
+    }
+
+    function filterStatus() {
+      const filter = document.getElementById('statusFilter').value.toLowerCase();
+      const rows = document.querySelectorAll('#projectTable tbody tr');
+      rows.forEach(row => {
+        const text = row.querySelector('.status').textContent.toLowerCase();
+        row.style.display = (filter === "all" || text.includes(filter)) ? '' : 'none';
+      });
+    }
+
+    function rowClicked(row) {
+      alert("Project: " + row.cells[2].innerText);
+    }
+
+    function exportTableToExcel() {
+      const wb = XLSX.utils.table_to_book(document.getElementById('projectTable'), { sheet: "Projects" });
+      XLSX.writeFile(wb, "CARS_Projects.xlsx");
+    }
+
+    function exportTableToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("CARS Project Table", 14, 10);
+      doc.autoTable({ html: '#projectTable', startY: 15 });
+      doc.save("CARS_Projects.pdf");
+    }
+
+    // Load navbar and footer
+    function loadContent() {
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => document.getElementById('navbar-container').innerHTML = data);
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => document.getElementById('footer-container').innerHTML = data);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadContent);
+
+    function searchTable() {
+  const input = document.getElementById("searchInput");
+  const filter = input.value.toLowerCase();
+  const table = document.getElementById("projectTable");
+  const trs = table.getElementsByTagName("tr");
+
+  for (let i = 1; i < trs.length; i++) {
+    let tds = trs[i].getElementsByTagName("td");
+    let showRow = false;
+
+    for (let j = 0; j < tds.length; j++) {
+      let cell = tds[j];
+      if (cell && cell.innerText.toLowerCase().indexOf(filter) > -1) {
+        showRow = true;
+        break;
+      }
+    }
+
+    trs[i].style.display = showRow ? "" : "none";
+  }
+}
+
+  </script>
+
+  <!-- Include jsPDF AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+</body>
+</html>

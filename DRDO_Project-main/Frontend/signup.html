@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup - CARS DRDO</title>
+  <style>
+    body { font-family: Arial; padding: 30px; background: #f7f7f7; }
+    .signup-box {
+      background: #fff; padding: 20px; border-radius: 10px;
+      max-width: 400px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      display: block; width: 100%; margin-top: 10px; padding: 10px;
+      border-radius: 5px; border: 1px solid #ccc;
+    }
+    button {
+      background-color: #1976d2; color: white; border: none;
+    }
+    button:hover {
+      background-color: #145ca1;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-box">
+    <h2>Sign Up</h2>
+    <form id="signup-form">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <select id="role" required>
+        <option value="">Select Role</option>
+        <option value="Admin">Admin</option>
+        <option value="Institute">Institute</option>
+        <option value="Director">Director</option>
+      </select>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password, role })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        alert("Signup successful!");
+        window.location.href = "login.html";
+      } else {
+        alert(data.msg || "Signup failed.");
+      }
+    });
+  </script>
+</body>
+</html>

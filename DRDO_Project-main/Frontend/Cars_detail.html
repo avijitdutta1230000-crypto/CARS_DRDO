@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submitted Project Overview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h3 {
+      margin-bottom: 15px;
+      border-bottom: 2px solid #28a745;
+      padding-bottom: 5px;
+      color: #28a745;
+    }
+
+    .value {
+      margin: 8px 0;
+    }
+
+    .label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .download-btn {
+      display: block;
+      margin: 0 auto 30px auto;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+  <button class="download-btn" onclick="downloadPDF()">Download as PDF</button>
+
+  <div class="container" id="pdf-content">
+    <h2>Submitted Project Summary</h2>
+
+    <div class="section">
+      <h3>Scientist Information</h3>
+      <div class="value"><span class="label">Name:</span> Rajmouli</div>
+      <div class="value"><span class="label">Field of Study:</span> Particle Physics</div>
+    </div>
+
+    <div class="section">
+      <h3>Academic Details</h3>
+      <div class="value"><span class="label">Institute:</span> Indian Institute of Science</div>
+      <div class="value"><span class="label">Address:</span> Bengaluru, Karnataka, India</div>
+      <div class="value"><span class="label">PI:</span> Dr. A. Sharma (asharma@iisc.ac.in, +91-9876543210)</div>
+      <div class="value"><span class="label">Co-PI:</span> Dr. K. Mehta (kmehta@iisc.ac.in, +91-9988776655)</div>
+    </div>
+
+    <div class="section">
+      <h3>Project Details</h3>
+      <div class="value"><span class="label">Title:</span> Neutrino Signal Mapping</div>
+      <div class="value"><span class="label">Cost Estimation:</span> ₹3,30,000</div>
+      <div class="value"><span class="label">Start Date:</span> 2025-06-01</div>
+      <div class="value"><span class="label">End Date (Original):</span> 2025-12-31</div>
+      <div class="value"><span class="label">Revised End Date:</span> 2026-01-31</div>
+      <div class="value"><span class="label">Estimated Duration:</span> 8.0 months</div>
+      <div class="value"><span class="label">Scope:</span> To map and analyze neutrino signals detected by underground observatories.</div>
+      <div class="value"><span class="label">Deliverables:</span> Final research paper, interactive dashboard, simulation models.</div>
+      <div class="milestones">
+        <span class="label">Milestones:</span>
+        <ul>
+          <li>Setup equipment – 2025-06-15</li>
+          <li>Initial signal data – 2025-08-01</li>
+          <li>Analysis completed – 2026-01-15</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Approval Status</h3>
+      <div class="value"><span class="label">Reviewed By:</span> Director</div>
+      <div class="value"><span class="label">Status:</span> Approved</div>
+    </div>
+
+    <!-- <div class="footer"> -->
+      &copy; 2025 Scientific Research Portal
+    </div>
+  </div>
+
+<div id="footer-container"></div>
+
+  <script>
+    function downloadPDF() {
+      const element = document.getElementById('pdf-content');
+      const opt = {
+        margin:       0.5,
+        filename:     'project-submission-summary.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+      // Function to load content from HTML files (navbar.html, footer.html)
+    function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+  </script>
+
+</body>
+</html>

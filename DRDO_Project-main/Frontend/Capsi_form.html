@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Capsi Project Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      padding: 0;
+      margin: 0;
+    }
+    form {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 12px 0 5px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar placeholder -->
+<div id="navbar-container"></div>
+
+<form>
+  <h2>CAPSI Project Form</h2>
+  <label for="scientistName">Scientist Name</label>
+  <input type="text" id="scientistName" name="scientistName" required />
+
+  <label for="institute">Institute</label>
+  <input type="text" id="institute" name="institute" required />
+
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required />
+
+  <label for="projectTitle">Project Title</label>
+  <input type="text" id="projectTitle" name="projectTitle" required />
+
+  <label for="description">Project Description</label>
+  <textarea id="description" name="description" rows="4" required></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
+<!-- Footer placeholder -->
+<div id="footer-container"></div>
+
+<!-- Load Navbar and Footer -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('components/navbar.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('navbar-container').innerHTML = data);
+
+    fetch('components/footer.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('footer-container').innerHTML = data);
+  });
+</script>
+
+</body>
+</html>

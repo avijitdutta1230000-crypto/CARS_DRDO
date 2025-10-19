@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CARS Portal - DRDO</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #ffb400;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .cta-button:hover {
+      background-color: #e0a000;
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #004080;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .feature-card {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      flex: 1 1 250px;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .feature-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #eee;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+
+  <header>
+    <h1>Welcome to the CARS Portal</h1>
+   
+    <a href="#features" class="cta-button">Explore Features</a>
+  </header>
+
+  <section id="features">
+    <h2>Key Highlights</h2>
+     <p style="max-width: 800px; margin: 0 auto; margin-bottom:4px; padding-bottom: 24px;">
+      The <strong>CARS (Contract for Acquisition of Research Services) Portal</strong> is a dedicated digital platform developed for the <strong>Defence Research and Development Organisation (DRDO)</strong> to facilitate and streamline the entire lifecycle of research service contracts. Designed with a focus on transparency, efficiency, and security, the portal serves as a one-stop solution for managing proposals, contract approvals, fund disbursements, progress tracking, and reporting. It enables seamless interaction between researchers, institutions, and DRDO by automating critical workflows, ensuring compliance, and providing real-time visibility into project milestones and resource utilization. With role-based dashboards, secure document management, and audit-ready reporting tools, the CARS Portal empowers DRDO to accelerate innovation while maintaining full oversight and governance of research engagements.
+    </p>
+    <div class="features">
+      <div class="feature-card">
+        <h3>Proposal Submission</h3>
+        <p>Submit and track your research proposals with ease using our guided workflows.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Smart Contracts</h3>
+        <p>Generate and manage digital contracts with approvals, signatures, and status tracking.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Progress Monitoring</h3>
+        <p>Track milestones, submit reports, and ensure timely project delivery.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Fund Management</h3>
+        <p>Transparent tracking of budgets, fund utilization, and expenditure reports.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Role-Based Dashboards</h3>
+        <p>Dedicated views for researchers, reviewers, and admin for seamless operations.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Secure Documents</h3>
+        <p>Upload, store, and manage all project files with audit logs and version control.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 CARS Portal | Developed for DRDO. Empowering research through smart systems.
+  </footer>
+
+  <script>
+    document.querySelector('.cta-button').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+
+  <div id="footer-container"></div>
+
+</body>
+
+<script>
+   function loadContent() {
+      // Fetch the navbar.html and footer.html files
+      fetch('components/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert navbar HTML content into the placeholder
+          document.getElementById('navbar-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading navbar:', error));
+
+      fetch('components/footer.html')
+        .then(response => response.text())
+        .then(data => {
+          // Insert footer HTML content into the placeholder
+          document.getElementById('footer-container').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading footer:', error));
+    }
+
+    // Call loadContent when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadContent);
+
+</script>
+</html>
